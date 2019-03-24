@@ -11,11 +11,11 @@ from model import efficient_data, gBM, monte_sim
 from datasets import create_params
 
 #グラフを描写するチャート
-import matplotlib.pyplot as plt
-import seaborn as sns
+# import matplotlib.pyplot as plt
+# import seaborn as sns
 
 # # 画像ファイルをbase64にエンコードする
-import base64
+# import base64
 
 app = Flask(__name__)
 
@@ -68,54 +68,54 @@ def statistic():
 # ----------------------------------------------
 #各種統計量の算出
 # ----------------------------------------------
-@app.route('/ts_analysis',methods=["POST"])
-def ts_analysis():
+# @app.route('/ts_analysis',methods=["POST"])
+# def ts_analysis():
 
-  #jsonファイルで転送されてきたものが辞書型になっている
-  data = request.get_json()
+#   #jsonファイルで転送されてきたものが辞書型になっている
+#   data = request.get_json()
 
-  # コード一覧リスト取得。コードをキーとしてバリューが入っている
-  names=list(data["data"].keys())
-  prices=list(data["data"].values())
-  #priceに入っている文字は文字列なので変換する必要がある
-  prices2=[]
+#   # コード一覧リスト取得。コードをキーとしてバリューが入っている
+#   names=list(data["data"].keys())
+#   prices=list(data["data"].values())
+#   #priceに入っている文字は文字列なので変換する必要がある
+#   prices2=[]
 
-  for price in prices:
-      lists=[float(i) for i in price]
-      prices2.append(lists)
+#   for price in prices:
+#       lists=[float(i) for i in price]
+#       prices2.append(lists)
 
-  df=pd.DataFrame()
+#   df=pd.DataFrame()
 
-  for name, price in zip(names, prices):
-      df[name]=price
+#   for name, price in zip(names, prices):
+#       df[name]=price
 
-  #変化率を算出させてくれる関数、100をかけて%表示にする
-  result1=df.pct_change(periods=1)*100
-  #1日目のデータがNONであるとエラーになるので削除、その後roundで小数点２桁で丸め
-  result2=round(result1.iloc[1:,:],2)
+#   #変化率を算出させてくれる関数、100をかけて%表示にする
+#   result1=df.pct_change(periods=1)*100
+#   #1日目のデータがNONであるとエラーになるので削除、その後roundで小数点２桁で丸め
+#   result2=round(result1.iloc[1:,:],2)
 
-  #チャートを描写するときは新しくfigureを定義する（そうしないと前のデータが残る）
-  plt.figure()
-  #文字化けするのでここでフォントを指定する
-  # sns.set(font='AppleGothic')
-  #カラムに銘柄名、データは収益率を入れたpandasデータフレーム
-  sns.pairplot(result2)
-  plt.savefig('static/images/sample.png')
+#   #チャートを描写するときは新しくfigureを定義する（そうしないと前のデータが残る）
+#   plt.figure()
+#   #文字化けするのでここでフォントを指定する
+#   # sns.set(font='AppleGothic')
+#   #カラムに銘柄名、データは収益率を入れたpandasデータフレーム
+#   sns.pairplot(result2)
+#   plt.savefig('static/images/sample.png')
 
-  #Base64でエンコードする画像
-  target_file="static/images/sample.png"
+#   #Base64でエンコードする画像
+#   target_file="static/images/sample.png"
 
-  #読み出し専用なら'r',書き込み専用なら 'w'
-  #mode に 'b' を追加するとファイルをバイナリモードで開く
-  with open(target_file, 'rb') as f:
-      data = f.read()
-  #Base64で画像をエンコード
-  # 参考サイト  https://financial-it-engineer.hatenablog.com/entry/20180728/1532757959
-  encode=base64.b64encode(data).decode("utf-8")
-  #辞書型形式にパッケージする
-  datasets={"data":encode}
+#   #読み出し専用なら'r',書き込み専用なら 'w'
+#   #mode に 'b' を追加するとファイルをバイナリモードで開く
+#   with open(target_file, 'rb') as f:
+#       data = f.read()
+#   #Base64で画像をエンコード
+#   # 参考サイト  https://financial-it-engineer.hatenablog.com/entry/20180728/1532757959
+#   encode=base64.b64encode(data).decode("utf-8")
+#   #辞書型形式にパッケージする
+#   datasets={"data":encode}
 
-  return make_response(jsonify(datasets))
+#   return make_response(jsonify(datasets))
 
 # ----------------------------------------------
 #シミュレーション
