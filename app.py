@@ -3,6 +3,9 @@ import numpy as np
 import pandas as pd
 import json
 
+#basic認証をするためのライブラリー
+# from flask_httpauth import HTTPBasicAuth
+
 # 独自定義関数
 from model import efficient_data, gBM, monte_sim
 from datasets import create_params
@@ -11,10 +14,26 @@ from datasets import create_params
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# 画像ファイルをbase64にエンコードする
+# # 画像ファイルをbase64にエンコードする
 import base64
 
 app = Flask(__name__)
+
+# ----------------------------------------------
+#認証するためのコード
+# ----------------------------------------------
+# auth = HTTPBasicAuth()
+
+# users = {
+#     "john": "hello",
+#     "susan": "bye"
+# }
+
+# @auth.get_password
+# def get_pw(username):
+#     if username in users:
+#         return users.get(username)
+#     return None
 
 # ----------------------------------------------
 #各種統計量の算出
@@ -69,8 +88,6 @@ def ts_analysis():
 
   for name, price in zip(names, prices):
       df[name]=price
-
-  print(type(df))
 
   #変化率を算出させてくれる関数、100をかけて%表示にする
   result1=df.pct_change(periods=1)*100
